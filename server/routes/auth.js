@@ -1,8 +1,8 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const User = require("../models/User");
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const User = require('../models/User');
 
 // Google login
 passport.use(
@@ -38,20 +38,19 @@ passport.use(
 
 // User data
 router.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  '/auth/google',
+  passport.authenticate('google', { scope: ['email', 'profile'] })
 );
 
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "/login-failure",
-    successRedirect: "/dashboard",
+router.get('/google/callback',
+  passport.authenticate('google', {
+    failureRedirect: '/login-failure',
+    successRedirect: '/dashboard',
   })
 );
 
-router.get("/login-failure", (req, res) => {
-  res.send("Something went wrong");
+router.get('/login-failure', (req, res) => {
+  res.send('Something went wrong');
 });
 
 passport.serializeUser(function (user, done) {
