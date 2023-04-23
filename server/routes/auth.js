@@ -1,10 +1,9 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const User = require('../models/User');
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const User = require("../models/User");
 
-// Google login
 passport.use(
   new GoogleStrategy(
     {
@@ -36,31 +35,51 @@ passport.use(
   )
 );
 
-// User data
+// Google Login Route
 router.get(
-  '/auth/google',
-  passport.authenticate('google', { scope: ['email', 'profile'] })
+  "/auth/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
 );
 
-router.get('/google/callback',
-  passport.authenticate('google', {
-    failureRedirect: '/login-failure',
-    successRedirect: '/dashboard',
+// Retrieve user data
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/login-failure",
+    successRedirect: "/dashboard",
   })
 );
 
+// Route if something goes wrong
 router.get('/login-failure', (req, res) => {
-  res.send('Something went wrong');
+  res.send('Something went wrong...');
 });
 
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
+// Destroy user session
+router.get('/logout', (req, res) => {
+  req.session.destroy(error => {
+    if(error) {
+      console.log(error);
+      res.send('Error loggin out');
+    } else {
+      res.redirect('/')
+    }
+  })
 });
 
-passport.deserializeUser(function (id, done) {
-  User.findById(id, function (err, user) {
-    done(err, user);
-  });
+
+// used to serialize the user for the session
+passport.serializeUser(function(user, done) {
+  done(null, user.id); 
+});
+
+// used to deserialize the user
+passport.deserializeUser(function(id, done) {
+  User.findById(id).then(function (user) {
+      done(null, user);
+  }).catch(function (err) {
+      console.log(err);
+  })
 });
 
 module.exports = router;
