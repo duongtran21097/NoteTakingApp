@@ -74,12 +74,13 @@ passport.serializeUser(function(user, done) {
 });
 
 // used to deserialize the user
-passport.deserializeUser(function(id, done) {
-  User.findById(id).then(function (user) {
-      done(null, user);
-  }).catch(function (err) {
-      console.log(err);
-  })
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err, null);
+  }
 });
 
 module.exports = router;
