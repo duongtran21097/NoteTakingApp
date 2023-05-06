@@ -16,7 +16,7 @@ exports.dashboard = async (req, res) => {
       { $sort: { updatedAt: -1 } },
       {
         $project: {
-          title: { $substr: ["$title", 0, 10] },
+          title: { $substr: ["$title", 0, 20] },
           body: { $substr: ["$body", 0, 50] },
           topic: { $substr: ["$topic", 0, 10] },
         },
