@@ -1,9 +1,15 @@
 const mongoose = require('mongoose');
+const shortid = require('shortid')
 
 const Schema = mongoose.Schema;
 const NoteSchema = new Schema({
+  _id: {
+    type: String,
+    default: shortid(), // magic!
+    trim: true,
+  },
   user: {
-    type: Schema.ObjectId,
+    type: String,
     ref: 'User'
   },
   title: {

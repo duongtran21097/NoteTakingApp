@@ -6,6 +6,7 @@ const connectDB = require('./server/config/db');
 const session = require('express-session');
 const passport = require('passport');
 const MongoStore = require('connect-mongo');
+const methodOverride = require("method-override");
 
 const app = express();
 const port =  5000 || process.env.PORT;
@@ -26,6 +27,7 @@ app.use(session({
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+app.use(methodOverride("_method"));
 
 //Connect DB
 connectDB();

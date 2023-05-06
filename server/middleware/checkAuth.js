@@ -1,4 +1,4 @@
-exports.isLoggedIn = function (req, res, next)
+exports.isLoggedIn = async function (req, res, next)
 {
     if (req.user) {
         next();
